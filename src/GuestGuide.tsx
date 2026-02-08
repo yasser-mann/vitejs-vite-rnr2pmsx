@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom'; // <--- Zidna hadi
+import { useParams } from 'react-router-dom';
 import {
   translations as configTranslations,
   Icons,
@@ -8,7 +8,41 @@ import {
   type GuideData,
 } from './config';
 import ImageCarousel from './components/ImageCarousel';
-import { supabase } from './clients'; // T2kked anna clients.ts kayna
+import { supabase } from './clients';
+
+// --- 0. SKELETON LOADER (NOUVEAU ✨) ---
+const GuideSkeleton = () => (
+  <div className="min-h-screen bg-[#F8FAFC] flex justify-center">
+    <div className="w-full max-w-md h-screen flex flex-col p-6 space-y-6 animate-pulse">
+      {/* Header: Host Avatar + Status */}
+      <div className="flex justify-between items-center mt-2 px-2">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-full bg-gray-200"></div>
+          <div className="space-y-2">
+            <div className="h-2 w-16 bg-gray-200 rounded"></div>
+            <div className="h-3 w-24 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+        <div className="h-7 w-20 bg-gray-200 rounded-full"></div>
+      </div>
+      {/* Welcome Title */}
+      <div className="space-y-3 py-2 px-2 text-center flex flex-col items-center">
+        <div className="h-8 w-3/4 bg-gray-200 rounded-lg"></div>
+        <div className="h-4 w-1/2 bg-gray-200 rounded-lg"></div>
+      </div>
+      {/* WiFi Card */}
+      <div className="h-56 w-full bg-gray-200 rounded-[32px] mx-1"></div>
+      {/* Grid Menu */}
+      <div className="grid grid-cols-2 gap-4 px-1">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="aspect-square bg-gray-200 rounded-[24px]"></div>
+        ))}
+      </div>
+      {/* Feedback Banner */}
+      <div className="h-20 w-full bg-gray-200 rounded-[24px] mt-4"></div>
+    </div>
+  </div>
+);
 
 // --- 1. SETUP TRANSLATIONS ---
 const extendedTranslations = {
@@ -673,9 +707,9 @@ const HomeView: React.FC<any> = ({
   );
 };
 
-// --- MAIN GUEST COMPONENT (RENAME FROM APP) ---
+// --- MAIN GUEST COMPONENT ---
 const GuestGuide: React.FC = () => {
-  const { slug } = useParams<{ slug: string }>(); // <--- HOOK JDID
+  const { slug } = useParams<{ slug: string }>();
   const [view, setView] = useState<string>('home');
   const [lang, setLang] = useState<Language>('en');
   const [selectedItem, setSelectedItem] = useState<Recommendation | null>(null);
@@ -692,23 +726,22 @@ const GuestGuide: React.FC = () => {
       try {
         setLoading(true);
 
-        // ⚠️ NEW: Check slug
         if (!slug) {
           console.error('No slug found!');
           setLoading(false);
           return;
         }
 
-        // 1. Jib Guide Info by Slug (Machi ID direct)
+        // 1. Get Guide Info by Slug
         const { data: guide, error: gErr } = await supabase
           .from('guides')
           .select('*')
-          .eq('slug', slug) // <--- SEARCH BY SLUG
+          .eq('slug', slug)
           .single();
 
         if (gErr) throw gErr;
 
-        // 2. Jib lbaqi b ID li lqina
+        // 2. Get details by ID
         const guideId = guide.id;
 
         const { data: manuals } = await supabase
@@ -727,9 +760,8 @@ const GuestGuide: React.FC = () => {
 
         // 3. Format data
         if (guide) {
-          // Check wash active (Security)
           if (guide.is_active === false) {
-            alert('Had l-guide suspended!'); // Tqder tdir page special hna
+            alert('Had l-guide suspended!');
             setLoading(false);
             return;
           }
@@ -758,25 +790,18 @@ const GuestGuide: React.FC = () => {
     };
 
     fetchData();
-  }, [slug]); // <--- Re-run ila tbeddel slug
+  }, [slug]);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTo(0, 0);
   }, [view, selectedItem]);
 
-  // Loading State
+  // Loading State -> USE SKELETON HERE
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC]">
-        <div className="animate-pulse flex flex-col items-center">
-          <div className="h-12 w-12 bg-gray-200 rounded-full mb-4"></div>
-          <div className="h-4 w-32 bg-gray-200 rounded"></div>
-        </div>
-      </div>
-    );
+    return <GuideSkeleton />;
   }
 
-  // Ila makanet ta data
+  // Fallback if no data
   if (!dbData)
     return (
       <div className="p-10 text-center">

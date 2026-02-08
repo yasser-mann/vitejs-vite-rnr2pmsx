@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import GuestGuide from './GuestGuide';
 import Admin from './Admin';
+import Home from './Home'; // <--- 1. Importe la nouvelle page
 
 const App = () => {
   return (
@@ -16,12 +17,9 @@ const App = () => {
         {/* Home Route */}
         <Route
           path="/"
-          element={
-            <div className="p-10 text-center text-xl font-bold">
-              Welcome to Airbnb Guide Platform 🏠
-            </div>
-          }
+          element={<Home />} 
         />
+        {/* ^^^ 2. Remplace l'ancien div par <Home /> */}
       </Routes>
     </Router>
   );
