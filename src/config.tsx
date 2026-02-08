@@ -1,3 +1,4 @@
+import React from 'react';
 
 // --- TYPES ---
 export interface Wifi {
