@@ -456,71 +456,119 @@ const EmergencyView: React.FC<ViewProps & { activeData: GuideData }> = ({
   onBack,
   t,
   activeData,
-}) => (
-  <div className="animate-fade-in pt-2">
-    <div className="flex items-center gap-4 mb-8 px-2">
-      <button
-        onClick={onBack}
-        className="p-3 bg-white border border-gray-200 rounded-full shadow-sm active:scale-90 hover:bg-gray-50 transition-all"
-      >
-        <Icons.ArrowLeft />
-      </button>
-      <h2 className="text-2xl font-bold text-red-600">{t.emergencyTitle}</h2>
-    </div>
-    <div className="space-y-4 px-1">
-      <a
-        href={`tel:${activeData.emergency.police}`}
-        className="flex items-center justify-between p-5 bg-white border border-red-50 rounded-2xl shadow-sm hover:shadow-md active:scale-95 transition-all group"
-      >
-        <div className="flex items-center gap-4">
-          <div className="p-3 bg-red-50 text-red-500 rounded-full group-hover:bg-red-500 group-hover:text-white transition-colors">
-            <Icons.Phone />
-          </div>
-          <span className="font-bold text-gray-800 text-lg">{t.police}</span>
-        </div>
-        <span className="text-xl font-bold text-gray-300 group-hover:text-red-500 transition-colors">
-          {activeData.emergency.police}
-        </span>
-      </a>
-      <a
-        href={`tel:${activeData.emergency.ambulance}`}
-        className="flex items-center justify-between p-5 bg-white border border-red-50 rounded-2xl shadow-sm hover:shadow-md active:scale-95 transition-all group"
-      >
-        <div className="flex items-center gap-4">
-          <div className="p-3 bg-red-50 text-red-500 rounded-full group-hover:bg-red-500 group-hover:text-white transition-colors">
-            <Icons.Phone />
-          </div>
-          <span className="font-bold text-gray-800 text-lg">{t.ambulance}</span>
-        </div>
-        <span className="text-xl font-bold text-gray-300 group-hover:text-red-500 transition-colors">
-          {activeData.emergency.ambulance}
-        </span>
-      </a>
-      <div className="mt-8">
-        <p className="text-sm text-gray-400 mb-3 px-2 font-bold uppercase tracking-wider">
-          {t.manager}
-        </p>
+}) => {
+  // Logic: Nqiw nmra d telephone mn 'space' w '+' bach tkhdm f lien WhatsApp
+  const waNumber = activeData.emergency.hostPhone.replace(/[^0-9]/g, '');
+
+  return (
+    <div className="animate-fade-in pt-2 pb-10">
+      {/* --- HEADER --- */}
+      <div className="flex items-center gap-4 mb-8 px-2">
+        <button
+          onClick={onBack}
+          className="p-3 bg-white border border-gray-200 rounded-full shadow-sm active:scale-90 hover:bg-gray-50 transition-all"
+        >
+          <Icons.ArrowLeft />
+        </button>
+        <h2 className="text-2xl font-bold text-red-600">{t.emergencyTitle}</h2>
+      </div>
+
+      {/* --- CONTENT --- */}
+      <div className="space-y-4 px-1">
+        
+        {/* POLICE */}
         <a
-          href={`tel:${activeData.emergency.hostPhone}`}
-          className="flex items-center justify-between p-6 bg-gray-900 text-white rounded-3xl shadow-xl shadow-gray-400/20 active:scale-95 transition-all border border-gray-800"
+          href={`tel:${activeData.emergency.police}`}
+          className="flex items-center justify-between p-5 bg-white border border-red-50 rounded-2xl shadow-sm hover:shadow-md active:scale-95 transition-all group"
         >
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-white/10 rounded-full backdrop-blur-sm">
+            <div className="p-3 bg-red-50 text-red-500 rounded-full group-hover:bg-red-500 group-hover:text-white transition-colors">
               <Icons.Phone />
             </div>
-            <div>
-              <span className="font-bold text-lg block">{t.callHost}</span>
-              <span className="text-xs text-gray-400">{t.available}</span>
-            </div>
+            <span className="font-bold text-gray-800 text-lg">{t.police}</span>
           </div>
-          <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/40">
-            <Icons.Phone />
-          </div>
+          <span className="text-xl font-bold text-gray-300 group-hover:text-red-500 transition-colors">
+            {activeData.emergency.police}
+          </span>
         </a>
+
+        {/* AMBULANCE */}
+        <a
+          href={`tel:${activeData.emergency.ambulance}`}
+          className="flex items-center justify-between p-5 bg-white border border-red-50 rounded-2xl shadow-sm hover:shadow-md active:scale-95 transition-all group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-red-50 text-red-500 rounded-full group-hover:bg-red-500 group-hover:text-white transition-colors">
+              <Icons.Phone />
+            </div>
+            <span className="font-bold text-gray-800 text-lg">{t.ambulance}</span>
+          </div>
+          <span className="text-xl font-bold text-gray-300 group-hover:text-red-500 transition-colors">
+            {activeData.emergency.ambulance}
+          </span>
+        </a>
+
+        {/* --- MANAGER SECTION --- */}
+        <div className="mt-8 border-t border-gray-100 pt-6">
+          <p className="text-sm text-gray-400 mb-4 px-2 font-bold uppercase tracking-wider text-center">
+            {t.manager || 'PROPERTY MANAGER'}
+          </p>
+
+          <div className="space-y-3">
+            
+            {/* CALL HOST BUTTON */}
+            <a
+              href={`tel:${activeData.emergency.hostPhone}`}
+              className="flex items-center justify-between p-6 bg-[#1F2937] text-white rounded-3xl shadow-xl shadow-gray-400/20 active:scale-95 transition-all border border-gray-800"
+            >
+              {/* GROUP 1: Icon + Text (Left Aligned) */}
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-white/10 rounded-full backdrop-blur-sm">
+                  <Icons.Phone />
+                </div>
+                <div className="text-left">
+                  <span className="font-bold text-lg block leading-tight">{t.callHost}</span>
+                  <span className="text-xs text-gray-400 block mt-1">{t.available}</span>
+                </div>
+              </div>
+
+              {/* GROUP 2: Arrow (Right Aligned) */}
+              <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center shrink-0">
+                <Icons.ChevronRight />
+              </div>
+            </a>
+
+            {/* WHATSAPP BUTTON */}
+            <a
+              href={`https://wa.me/${waNumber}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between p-6 bg-[#25D366] text-white rounded-3xl shadow-xl shadow-green-500/20 active:scale-95 transition-all border border-green-400"
+            >
+              {/* GROUP 1: Icon + Text (Left Aligned - Exactly like Call Host) */}
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-white/20 rounded-full backdrop-blur-sm">
+                  {/* WhatsApp SVG Icon */}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                </div>
+                <div className="text-left">
+                  <span className="font-bold text-lg block leading-tight">{t.whatsappHost || 'WhatsApp Host'}</span>
+                  <span className="text-xs text-green-100 block mt-1">{t.chatNow || 'Chat now'}</span>
+                </div>
+              </div>
+
+              {/* GROUP 2: Icon (Right Aligned) */}
+              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shrink-0">
+                <Icons.ExternalLink />
+              </div>
+            </a>
+
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const HomeView: React.FC<any> = ({
   onNavigate,

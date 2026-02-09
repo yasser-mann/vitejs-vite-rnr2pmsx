@@ -180,6 +180,8 @@ export const translations = {
     walk: 'Walk',
     ratings: 'Ratings',
     seeDetails: 'See Details',
+    whatsappHost: 'WhatsApp Host', // <--- ZID HADI
+    chatNow: 'Chat now',           // <--- ZID HADI
   },
   fr: {
     welcome: 'Bienvenue,',
@@ -218,6 +220,8 @@ export const translations = {
     walk: 'Marche',
     ratings: 'Avis',
     seeDetails: 'Voir Détails',
+    whatsappHost: 'WhatsApp Hôte', // <--- ZID HADI
+    chatNow: 'Discuter',           // <--- ZID HADI
   },
   es: {
     welcome: 'Bienvenido,',
@@ -256,6 +260,8 @@ export const translations = {
     walk: 'Caminando',
     ratings: 'Reseñas',
     seeDetails: 'Ver Detalles',
+    whatsappHost: 'WhatsApp Anfitrión', // <--- ZID HADI
+    chatNow: 'Chatear ahora',           // <--- ZID HADI
   },
 };
 
