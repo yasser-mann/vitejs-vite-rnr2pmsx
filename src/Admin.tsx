@@ -71,10 +71,13 @@ export default function Admin() {
     setLoading(false);
   };
 
-  // --- FUNCTION 1: ZID HOST (CLIENT) ---
+  // --- FUNCTION 1: ZID HOST (CLIENT) - MODIFIED FOR RLS ---
   const handleAddHost = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newHost.slug || !newHost.name) return alert('Slug & Name darouri!');
+
+    // Check session
+    if (!session?.user) return alert("Khassk tkon mconnecté!");
 
     const { error } = await supabase.from('guides').insert([
       {
@@ -84,6 +87,7 @@ export default function Admin() {
         wifiPassword: newHost.pass,
         hostPhone: newHost.phone,
         is_active: true,
+        host_id: session.user.id, // <--- HNA FIN ZDNA L-ID
       },
     ]);
 
